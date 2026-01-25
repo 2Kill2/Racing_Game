@@ -2,14 +2,13 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    [Header("Movement Settings")]
+    //move settings
     [SerializeField] private float moveSpeed = 5f;
     [SerializeField] private float sprintSpeed = 8f;
-    [SerializeField] private float jumpForce = 5f;
     [SerializeField] private float gravity = -9.81f;
-    [SerializeField] private float rotationSpeed = 10f;
+    [SerializeField] private float turnSpeed = 200f;
 
-    [Header("Camera Settings")]
+    //cam settings
     [SerializeField] private Transform cameraTarget;
     [SerializeField] private float mouseSensitivity = 2f;
     [SerializeField] private float cameraDistance = 5f;
@@ -17,7 +16,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float maxVerticalAngle = 60f;
     [SerializeField] private float cameraHeight = 1.5f;
 
-    [Header("Ground Check")]
     [SerializeField] private Transform groundCheck;
     [SerializeField] private float groundDistance = 0.4f;
     [SerializeField] private LayerMask groundMask;
@@ -30,8 +28,8 @@ public class PlayerController : MonoBehaviour
     private bool isGrounded;
 
     // cam
-    private float horizontalAngle = 0f;
-    private float verticalAngle = 0f;
+    private float horizontalAngle = 20f;
+    private float verticalAngle = 20f;
 
     void Start()
     {
@@ -42,8 +40,7 @@ public class PlayerController : MonoBehaviour
         {
             cameraTransform = mainCamera.transform;
         }
-
-        // Lock and hide cursor
+        
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
     }
@@ -64,7 +61,6 @@ public class PlayerController : MonoBehaviour
 
         float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity;
         float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity;
-
         horizontalAngle += mouseX;
         verticalAngle -= mouseY;
         verticalAngle = Mathf.Clamp(verticalAngle, minVerticalAngle, maxVerticalAngle);
@@ -100,25 +96,19 @@ public class PlayerController : MonoBehaviour
         float horizontal = Input.GetAxis("Horizontal");
         float vertical = Input.GetAxis("Vertical");
 
-        Vector3 cameraForward = mainCamera.transform.forward;
-        Vector3 cameraRight = mainCamera.transform.right;
-        cameraForward.y = 0f;
-        cameraRight.y = 0f;
-        cameraForward.Normalize();
-        cameraRight.Normalize();
+        if (vertical != 0 && horizontal != 0)
+        {
+            float turn = horizontal * turnSpeed * Time.deltaTime;
+            transform.Rotate(0f, turn, 0f);
+        }
 
-        Vector3 moveDirection = (cameraForward * vertical + cameraRight * horizontal).normalized;
+        Vector3 moveDirection = transform.forward * vertical;
 
         float currentSpeed = Input.GetKey(KeyCode.LeftShift) ? sprintSpeed : moveSpeed;
 
-        if (moveDirection.magnitude > 0.1f)
-        {
-            controller.Move(moveDirection * currentSpeed * Time.deltaTime);
-            Quaternion targetRotation = Quaternion.LookRotation(moveDirection);
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
-        }
+        controller.Move(moveDirection * currentSpeed * Time.deltaTime);
 
-        velocity.y += gravity * Time.deltaTime;
+        velocity.y += gravity * Time.deltaTime; //gravity
         controller.Move(velocity * Time.deltaTime);
     }
 
@@ -128,15 +118,6 @@ public class PlayerController : MonoBehaviour
         {
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
-        }
-    }
-
-    void OnDrawGizmosSelected()
-    {
-        if (groundCheck != null)
-        {
-            Gizmos.color = Color.yellow;
-            Gizmos.DrawWireSphere(groundCheck.position, groundDistance);
         }
     }
 }
