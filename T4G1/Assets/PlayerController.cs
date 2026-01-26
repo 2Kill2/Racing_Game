@@ -3,8 +3,10 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     //move settings
-    [SerializeField] private float moveSpeed = 5f;
-    [SerializeField] private float sprintSpeed = 8f;
+    [SerializeField] private float acceleration = 5f;
+    [SerializeField] private float deceleration = 8f;
+    [SerializeField] private float topSpeed = 5f;
+    [SerializeField] private float sprintTopSpeed = 8f;
     [SerializeField] private float gravity = -9.81f;
     [SerializeField] private float turnSpeed = 200f;
 
@@ -15,6 +17,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float minVerticalAngle = -30f;
     [SerializeField] private float maxVerticalAngle = 60f;
     [SerializeField] private float cameraHeight = 1.5f;
+    [SerializeField] private float cameraCollisionOffset = 0.2f;
 
     [SerializeField] private Transform groundCheck;
     [SerializeField] private float groundDistance = 0.4f;
@@ -26,9 +29,10 @@ public class PlayerController : MonoBehaviour
 
     private Vector3 velocity;
     private bool isGrounded;
+    private float currentSpeed = 0f;
 
     // cam
-    private float horizontalAngle = 20f;
+    private float horizontalAngle = 0f;
     private float verticalAngle = 20f;
 
     void Start()
@@ -71,13 +75,17 @@ public class PlayerController : MonoBehaviour
         Vector3 offset = rotation * new Vector3(0f, 0f, -cameraDistance);
 
         RaycastHit hit;
-        if (Physics.Raycast(targetPosition, offset.normalized, out hit, cameraDistance))
+        Vector3 desiredPosition = targetPosition + offset;
+        Vector3 direction = desiredPosition - targetPosition;
+
+        if (Physics.SphereCast(targetPosition, cameraCollisionOffset, direction.normalized, out hit, cameraDistance))
         {
-            cameraTransform.position = hit.point;
+            float distance = Mathf.Max(hit.distance - cameraCollisionOffset, 0.5f);
+            cameraTransform.position = targetPosition + direction.normalized * distance;
         }
         else
         {
-            cameraTransform.position = targetPosition + offset;
+            cameraTransform.position = desiredPosition;
         }
 
         cameraTransform.LookAt(targetPosition);
@@ -96,15 +104,34 @@ public class PlayerController : MonoBehaviour
         float horizontal = Input.GetAxis("Horizontal");
         float vertical = Input.GetAxis("Vertical");
 
-        if (vertical != 0 && horizontal != 0)
+        float targetTopSpeed = Input.GetKey(KeyCode.LeftShift) ? sprintTopSpeed : topSpeed;
+
+        if (vertical != 0)
+        {
+            float targetSpeed;
+            if (vertical > 0)
+            {
+                targetSpeed = targetTopSpeed;
+            }
+            else
+            {
+                targetSpeed = -targetTopSpeed;
+            }
+
+            currentSpeed = Mathf.MoveTowards(currentSpeed, targetSpeed, acceleration * Time.deltaTime);
+        }
+        else
+        {
+            currentSpeed = Mathf.MoveTowards(currentSpeed, 0f, deceleration * Time.deltaTime);
+        }
+
+        if (Mathf.Abs(currentSpeed) > 0.1f && horizontal != 0)
         {
             float turn = horizontal * turnSpeed * Time.deltaTime;
             transform.Rotate(0f, turn, 0f);
         }
 
-        Vector3 moveDirection = transform.forward * vertical;
-
-        float currentSpeed = Input.GetKey(KeyCode.LeftShift) ? sprintSpeed : moveSpeed;
+        Vector3 moveDirection = transform.forward * currentSpeed;
 
         controller.Move(moveDirection * currentSpeed * Time.deltaTime);
 
