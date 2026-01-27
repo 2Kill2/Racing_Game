@@ -2,13 +2,14 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    //ADD SOUNDS, UI
     //move settings
     [SerializeField] private float acceleration = 5f;
     [SerializeField] private float deceleration = 8f;
     [SerializeField] private float topSpeed = 5f;
     [SerializeField] private float sprintTopSpeed = 8f;
     [SerializeField] private float gravity = -9.81f;
-    [SerializeField] private float turnSpeed = 200f;
+    [SerializeField] private float turnSpeed = 150f;
 
     //cam settings
     [SerializeField] private Transform cameraTarget;
@@ -18,10 +19,15 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float maxVerticalAngle = 60f;
     [SerializeField] private float cameraHeight = 1.5f;
     [SerializeField] private float cameraCollisionOffset = 0.2f;
+    [SerializeField] private float normalFOV = 60f;
+    [SerializeField] private float boostFOV = 75f;
+    [SerializeField] private float fovTransitionSpeed = 5f;
 
     [SerializeField] private Transform groundCheck;
     [SerializeField] private float groundDistance = 0.4f;
     [SerializeField] private LayerMask groundMask;
+
+    [SerializeField] private LayerMask hazardLayer;
 
     private CharacterController controller;
     private Camera mainCamera;
@@ -57,6 +63,14 @@ public class PlayerController : MonoBehaviour
     void LateUpdate()
     {
         moveCamera();
+        camFOV();
+    }
+
+    void camFOV() //making camera fov change on boost
+    {
+        if (mainCamera == null) return;
+        float targetFOV = Input.GetKey(KeyCode.LeftShift) ? boostFOV : normalFOV;
+        mainCamera.fieldOfView = Mathf.Lerp(mainCamera.fieldOfView, targetFOV, fovTransitionSpeed * Time.deltaTime);
     }
 
     void moveCamera()
@@ -93,6 +107,9 @@ public class PlayerController : MonoBehaviour
 
     void Move()
     {
+        float horizontal = Input.GetAxis("Horizontal");
+        float vertical = Input.GetAxis("Vertical");
+        float targetTopSpeed = Input.GetKey(KeyCode.LeftShift) ? sprintTopSpeed : topSpeed;
 
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
 
@@ -101,12 +118,7 @@ public class PlayerController : MonoBehaviour
             velocity.y = -2f;
         }
 
-        float horizontal = Input.GetAxis("Horizontal");
-        float vertical = Input.GetAxis("Vertical");
-
-        float targetTopSpeed = Input.GetKey(KeyCode.LeftShift) ? sprintTopSpeed : topSpeed;
-
-        if (vertical != 0)
+        if (vertical != 0) //I HAVE MEGA AIDS
         {
             float targetSpeed;
             if (vertical > 0)
@@ -117,7 +129,6 @@ public class PlayerController : MonoBehaviour
             {
                 targetSpeed = -targetTopSpeed;
             }
-
             currentSpeed = Mathf.MoveTowards(currentSpeed, targetSpeed, acceleration * Time.deltaTime);
         }
         else
@@ -131,20 +142,38 @@ public class PlayerController : MonoBehaviour
             transform.Rotate(0f, turn, 0f);
         }
 
-        Vector3 moveDirection = transform.forward * currentSpeed;
-
-        controller.Move(moveDirection * currentSpeed * Time.deltaTime);
+        Vector3 movement = transform.forward * currentSpeed * Time.deltaTime;
+        controller.Move(movement);
 
         velocity.y += gravity * Time.deltaTime; //gravity
         controller.Move(velocity * Time.deltaTime);
     }
 
-    void OnApplicationFocus(bool hasFocus)
+    void OnCollisionEnter(Collision collision)
     {
-        if (hasFocus)
+        if (((1 << collision.gameObject.layer) & hazardLayer) != 0)
         {
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
+            pause();
         }
+    }
+    void OnControllerColliderHit(ControllerColliderHit hit)
+    {
+        if (((1 << hit.gameObject.layer) & hazardLayer) != 0)
+        {
+            pause();
+        }
+    }
+    void OnTriggerEnter(Collider other)
+    {
+        // For trigger colliders
+        if (((1 << other.gameObject.layer) & hazardLayer) != 0)
+        {
+            pause();
+        }
+    }
+
+    void pause()
+    {
+        Time.timeScale = 0f;
     }
 }
