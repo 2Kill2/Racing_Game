@@ -13,6 +13,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float sprintTopSpeed = 8f;
     [SerializeField] private float gravity = -9.81f;
     [SerializeField] private float turnSpeed = 150f;
+    [SerializeField] private float maxBoost = 100f;
+    [SerializeField] private float boost = 100f;
 
     //cam settings
     [SerializeField] private Transform cameraTarget;
@@ -165,7 +167,7 @@ public class PlayerController : MonoBehaviour
     {
         if (((1 << collision.gameObject.layer) & hazardLayer) != 0)
         {
-            pause();
+            Pause();
             gameOverScreen.gameObject.SetActive(true);
             Debug.Log("collisionenter");
         }
@@ -174,7 +176,7 @@ public class PlayerController : MonoBehaviour
     {
         if (((1 << hit.gameObject.layer) & hazardLayer) != 0)
         {
-            pause();
+            Pause();
             gameOverScreen.gameObject.SetActive(true);
         }
     }
@@ -182,12 +184,18 @@ public class PlayerController : MonoBehaviour
     {
         if (((1 << other.gameObject.layer) & hazardLayer) != 0)
         {
-            pause();
+            Pause();
             gameOverScreen.gameObject.SetActive(true);
         }
     }
 
-    void pause()
+    public void GameWon()
+    {
+        Pause();
+        gameOverScreen.gameObject.SetActive(true);
+    }
+
+    void Pause()
     {
         Time.timeScale = 0f;
     }
