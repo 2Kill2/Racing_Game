@@ -5,9 +5,9 @@ using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
-    //ADD SOUNDS
+    //ADD SOUNDS AND FX
     [SerializeField] private string thisLevel;
-    //move settings
+    //movement settings
     [SerializeField] private float acceleration = 5f;
     [SerializeField] private float deceleration = 8f;
     [SerializeField] private float topSpeed = 5f;
@@ -31,6 +31,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float maxVerticalAngle = 60f;
     [SerializeField] private float cameraHeight = 1.5f;
     [SerializeField] private float cameraCollisionOffset = 0.2f;
+    [SerializeField] private LayerMask cameraCollisionMask = ~0;
     [SerializeField] private float normalFOV = 60f;
     [SerializeField] private float boostFOV = 75f;
     [SerializeField] private float fovTransitionSpeed = 5f;
@@ -135,10 +136,17 @@ public class PlayerController : MonoBehaviour
         Vector3 desiredPosition = targetPosition + offset;
         Vector3 direction = desiredPosition - targetPosition;
 
-        if (Physics.SphereCast(targetPosition, cameraCollisionOffset, direction.normalized, out hit, cameraDistance))
+        if (Physics.SphereCast(targetPosition, cameraCollisionOffset, direction.normalized, out hit, cameraDistance, cameraCollisionMask))
         {
-            float distance = Mathf.Max(hit.distance - cameraCollisionOffset, 0.5f);
-            cameraTransform.position = targetPosition + direction.normalized * distance;
+            if (hit.transform != transform && !hit.transform.IsChildOf(transform))
+            {
+                float distance = Mathf.Max(hit.distance - cameraCollisionOffset, 0.5f);
+                cameraTransform.position = targetPosition + direction.normalized * distance;
+            }
+            else
+            {
+                cameraTransform.position = desiredPosition;
+            }
         }
         else
         {
@@ -221,6 +229,18 @@ public class PlayerController : MonoBehaviour
                 }
             }
             other.gameObject.SetActive(false);
+        }
+    }
+
+    public void AddFuel()
+    {
+        if (currentBoost >= 75)
+        {
+            currentBoost = 100;
+        }
+        else
+        {
+            currentBoost += 25;
         }
     }
 
