@@ -193,7 +193,7 @@ public class PlayerController : MonoBehaviour
         controller.Move(velocity * Time.deltaTime);
 
         if (Input.GetKey(KeyCode.R)) { SceneManager.LoadScene(thisLevel); Time.timeScale = 1f; }
-        if (Input.GetKey(KeyCode.E) && gameWon) { SceneManager.LoadScene("MainMenu"); Time.timeScale = 1f; }//mmmm
+        if (Input.GetKey(KeyCode.E) && gameWon) {Cursor.lockState = CursorLockMode.None; Cursor.visible = true; SceneManager.LoadScene("MainMenu"); Time.timeScale = 1f; }//mmmm
     }
 
     //COLLISION
