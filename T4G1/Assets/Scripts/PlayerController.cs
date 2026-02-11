@@ -1,3 +1,4 @@
+using System.Threading;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Audio;
@@ -45,6 +46,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private TextMeshProUGUI speedUI;
     [SerializeField] private Canvas gameOverScreen;
     [SerializeField] private Canvas gameWinScreen;
+    [SerializeField] private TextMeshProUGUI timerUI;
 
     [SerializeField] private LayerMask hazardLayer;
 
@@ -75,6 +77,10 @@ public class PlayerController : MonoBehaviour
 
     private bool gameWon = false;
 
+    //timer
+    private float pasttime = 0f;
+    private bool timerRunning = true;
+
     // functions
     void Start()
     {
@@ -98,6 +104,7 @@ public class PlayerController : MonoBehaviour
         speedUI.text = Mathf.Floor(Mathf.Abs(currentSpeed)).ToString();
         HPSlider.value = HP;
         carEngine();
+        topTimer();
     }
 
     void LateUpdate()
@@ -106,9 +113,24 @@ public class PlayerController : MonoBehaviour
         camFOV();
     }
 
+    void topTimer()
+    {
+        if (timerRunning)
+        {
+            pasttime += Time.deltaTime;
+            int min = Mathf.FloorToInt(pasttime / 60f);
+            int sec = Mathf.FloorToInt(pasttime % 60f);
+            int milli = Mathf.FloorToInt((pasttime * 100f) % 100f);
+
+            string timeString = string.Format("{0:00}:{1:00}:{2:00}", min, sec, milli);
+            timerUI.text = timeString;
+        }
+    }
+
     void camFOV() //making camera fov change on boost
     {
         if (mainCamera == null) return;
+        if (currentBoost <= 0) return;
         float targetFOV = Input.GetKey(KeyCode.LeftShift) ? boostFOV : normalFOV;
         mainCamera.fieldOfView = Mathf.Lerp(mainCamera.fieldOfView, targetFOV, fovTransitionSpeed * Time.deltaTime);
     }
@@ -314,9 +336,11 @@ public class PlayerController : MonoBehaviour
                 if (HP <= 0)
                 {
                     Pause();
-                    gameOverScreen.gameObject.SetActive(true); //convert to a loss function when u can bruh
+                    ad.Stop();
+                    gameOverScreen.gameObject.SetActive(true);//convert to a loss function when u can bruh
                 }
             }
+            ad.PlayOneShot(objectBreak);
             other.gameObject.SetActive(false);
         }
     }
@@ -331,6 +355,7 @@ public class PlayerController : MonoBehaviour
         {
             currentBoost += 25;
         }
+        ad.PlayOneShot(boostRefill);
     }
 
     public void GameWon()
@@ -338,6 +363,7 @@ public class PlayerController : MonoBehaviour
         Pause();
         gameWinScreen.gameObject.SetActive(true);
         gameWon = true;
+        ad.Stop();
     }
 
     void Pause()
