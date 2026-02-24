@@ -125819,10 +125819,11 @@ MonoBehaviour:
   - {fileID: 8209822441010671590, guid: 9a0e1be2877b0a84c814deb5b78efe32, type: 3}
   - {fileID: 168501549447659566, guid: de9f15614a21f8c4da5f1f2c31e8aee3, type: 3}
   - {fileID: 7117971729492502911, guid: 2786e7e87e3b5d84aa500b2df069bf70, type: 3}
-  - {fileID: 3797355007473466914, guid: cbbd955ba01d7fa4eb20119c4d194e7a, type: 3}
+  - {fileID: 3225815590839008887, guid: ca890d319cbd6304c9ed1ed99629304e, type: 3}
+  - {fileID: 3403430745707464190, guid: 61b408dd38d658941a0ab9ff23ad0b98, type: 3}
   spacing: 5
   horizontalOffset: 0
-  verticalOffset: 0.7
+  verticalOffset: 0.5
   randomizeSide: 1
   randomOffsetRange: {x: -3, y: 3}
 --- !u!1 &1876226091
