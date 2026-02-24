@@ -20,6 +20,7 @@ public class PlayerController : MonoBehaviour
     //boost
     [SerializeField] private float maxBoost = 100f;
     [SerializeField] private float boostDrainRate = 20f;
+    [SerializeField] private float boostRegenRate = 5f;
     [SerializeField] private Slider boostSlider;
     private bool wasBoost = false;
     private float currentBoost = 100f;
@@ -39,7 +40,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float fovTransitionSpeed = 5f;
 
     //UI
-    [SerializeField] private float maxHP = 100f;
+    //[SerializeField] private float maxHP = 100f;
     private float HP = 100f;
     [SerializeField] private Slider HPSlider;
 
@@ -105,6 +106,7 @@ public class PlayerController : MonoBehaviour
         HPSlider.value = HP;
         carEngine();
         topTimer();
+        manageVFX();
     }
 
     void LateUpdate()
@@ -204,17 +206,22 @@ public class PlayerController : MonoBehaviour
     void boost()
     {
         isBoosting = Input.GetKey(KeyCode.LeftShift) && currentSpeed > 0 && currentBoost > 0;
-        if (isBoosting && !wasBoost)
+        if (isBoosting && !wasBoost) //sound
         {
             ad.PlayOneShot(boostSound);
         }
-        if (isBoosting)
+        if (isBoosting) //boosting
         {
             currentBoost -= boostDrainRate * Time.deltaTime;
             currentBoost = Mathf.Max(currentBoost, 0f);
         }
+        else if (currentBoost < maxBoost) //regen
+        {
+            currentBoost += boostRegenRate * Time.deltaTime;
+            currentBoost = Mathf.Min(currentBoost, maxBoost);
+        }
 
-        if (boostSlider != null)
+        if (boostSlider != null)//update ui
         {
             boostSlider.value = currentBoost;
         }
@@ -226,6 +233,16 @@ public class PlayerController : MonoBehaviour
     {
         currentBoost += amount;
         currentBoost = Mathf.Min(currentBoost, maxBoost);
+    }
+
+    void manageVFX()
+    {
+        if (HP <= 0)
+        {
+            Pause();
+            ad.Stop();
+            gameOverScreen.gameObject.SetActive(true);//convert to a loss function when u can bruh
+        }
     }
 
     void moveCamera()
