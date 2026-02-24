@@ -72,6 +72,15 @@ public class PlayerController : MonoBehaviour
     private EngineState currentEngineState = EngineState.Idle;
     private float previousSpeed = 0f;
 
+    //VFX
+    [SerializeField] private GameObject boostVFX;
+    [SerializeField] private GameObject lightSmoke;
+    [SerializeField] private GameObject heavySmoke;
+    [SerializeField] private GameObject paintChip;
+    [SerializeField] private GameObject woodChip;
+    [SerializeField] private GameObject metalChip;
+    [SerializeField] private GameObject meatChip;
+
     // cam
     private float horizontalAngle = 0f;
     private float verticalAngle = 20f;
@@ -106,7 +115,7 @@ public class PlayerController : MonoBehaviour
         HPSlider.value = HP;
         carEngine();
         topTimer();
-        manageVFX();
+        manageHPVFX();
     }
 
     void LateUpdate()
@@ -214,11 +223,17 @@ public class PlayerController : MonoBehaviour
         {
             currentBoost -= boostDrainRate * Time.deltaTime;
             currentBoost = Mathf.Max(currentBoost, 0f);
+            boostVFX.gameObject.SetActive(true);
         }
         else if (currentBoost < maxBoost) //regen
         {
             currentBoost += boostRegenRate * Time.deltaTime;
             currentBoost = Mathf.Min(currentBoost, maxBoost);
+            boostVFX.gameObject.SetActive(false);
+        }
+        else if (!isBoosting) // not boosting
+        {
+            boostVFX.gameObject.SetActive(false);
         }
 
         if (boostSlider != null)//update ui
@@ -235,13 +250,16 @@ public class PlayerController : MonoBehaviour
         currentBoost = Mathf.Min(currentBoost, maxBoost);
     }
 
-    void manageVFX()
+    void manageHPVFX()
     {
-        if (HP <= 0)
+        if (HP <= 50 && HP > 25)
         {
-            Pause();
-            ad.Stop();
-            gameOverScreen.gameObject.SetActive(true);//convert to a loss function when u can bruh
+            lightSmoke.SetActive(true);
+        }
+        else if (HP <= 25 && HP > 0)
+        {
+            lightSmoke.SetActive(false);
+            heavySmoke.SetActive(true);
         }
     }
 
@@ -358,8 +376,17 @@ public class PlayerController : MonoBehaviour
                 }
             }
             ad.PlayOneShot(objectBreak);
+            playParticle(paintChip);
             other.gameObject.SetActive(false);
         }
+    }
+
+    private void playParticle(GameObject m)
+    {
+        var p = m.GetComponent<ParticleSystem>();
+        var pe = p.emission;
+        pe.enabled = true;
+        p.Play();
     }
 
     public void AddFuel()

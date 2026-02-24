@@ -50,7 +50,7 @@ ParticleSystem:
   emitterVelocityMode: 0
   looping: 0
   prewarm: 0
-  playOnAwake: 1
+  playOnAwake: 0
   useUnscaledTime: 0
   autoRandomSeed: 1
   startDelay:
@@ -169,8 +169,8 @@ ParticleSystem:
     startSpeed:
       serializedVersion: 2
       minMaxState: 3
-      scalar: 10
-      minScalar: 5
+      scalar: 3
+      minScalar: 3
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -664,7 +664,7 @@ ParticleSystem:
   ShapeModule:
     serializedVersion: 6
     enabled: 1
-    type: 4
+    type: 2
     angle: 5
     length: 5
     boxThickness: {x: 0, y: 0, z: 0}
@@ -751,7 +751,7 @@ ParticleSystem:
     sphericalDirectionAmount: 0
     randomPositionAmount: 0
     radius:
-      value: 0.3
+      value: 0.5
       mode: 0
       spread: 0
       speed:
@@ -5729,7 +5729,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &3188681031450103719
 Transform:
   m_ObjectHideFlags: 0
@@ -10702,7 +10702,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4662593789939301142
 Transform:
   m_ObjectHideFlags: 0
@@ -16582,6 +16582,13 @@ MonoBehaviour:
   boostRefill: {fileID: 0}
   objectBreak: {fileID: 8300000, guid: 3a3240112ab5609439a640ab4058017e, type: 3}
   carExplode: {fileID: 8300000, guid: 5031de881aa154a49b4d5378b9c4b6f6, type: 3}
+  boostVFX: {fileID: 9008453057182332087}
+  lightSmoke: {fileID: 3911038097334158308}
+  heavySmoke: {fileID: 3870049851313161639}
+  paintChip: {fileID: 798687851057477593}
+  woodChip: {fileID: 0}
+  metalChip: {fileID: 0}
+  meatChip: {fileID: 0}
 --- !u!114 &3099447285890651094
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17042,7 +17049,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &5406474673993002942
 Transform:
   m_ObjectHideFlags: 0
