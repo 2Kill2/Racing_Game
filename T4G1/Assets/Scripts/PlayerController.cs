@@ -79,6 +79,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private GameObject paintChip;
     [SerializeField] private GameObject woodChip;
     [SerializeField] private GameObject metalChip;
+    [SerializeField] private GameObject rockChip;
     [SerializeField] private GameObject meatChip;
 
     // cam
@@ -374,6 +375,10 @@ public class PlayerController : MonoBehaviour
                     ad.Stop();
                     gameOverScreen.gameObject.SetActive(true);//convert to a loss function when u can bruh
                 }
+            }
+            if (other.gameObject.CompareTag("Hazard_Rock"))
+            {
+                playParticle(rockChip);
             }
             ad.PlayOneShot(objectBreak);
             playParticle(paintChip);
