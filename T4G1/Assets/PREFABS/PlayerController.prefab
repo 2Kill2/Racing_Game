@@ -41,7 +41,7 @@ ParticleSystem:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 798687851057477593}
   serializedVersion: 8
-  lengthInSec: 0.1
+  lengthInSec: 1
   simulationSpeed: 1
   stopAction: 0
   cullingMode: 0
@@ -116,7 +116,7 @@ ParticleSystem:
     startLifetime:
       serializedVersion: 2
       minMaxState: 3
-      scalar: 2
+      scalar: 1
       minScalar: 1
       maxCurve:
         serializedVersion: 2
@@ -169,8 +169,8 @@ ParticleSystem:
     startSpeed:
       serializedVersion: 2
       minMaxState: 3
-      scalar: 3
-      minScalar: 3
+      scalar: 5
+      minScalar: 5
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -611,7 +611,7 @@ ParticleSystem:
     gravityModifier:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 1
+      scalar: 2
       minScalar: 0
       maxCurve:
         serializedVersion: 2
@@ -870,7 +870,7 @@ ParticleSystem:
     rateOverTime:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 50
+      scalar: 10
       minScalar: 10
       maxCurve:
         serializedVersion: 2
@@ -16498,6 +16498,7 @@ GameObject:
   - component: {fileID: 2637962661417200384}
   - component: {fileID: 4563874724323141215}
   - component: {fileID: 3099447285890651094}
+  - component: {fileID: 7087200682625277164}
   - component: {fileID: 7287576227080781944}
   - component: {fileID: 4191698773489848949}
   - component: {fileID: 723680713298283431}
@@ -16606,6 +16607,24 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   touchedColor: {r: 0, g: 1, b: 0, a: 1}
+--- !u!114 &7087200682625277164
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7558849955992241931}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f1d3da44ce6c334c8c6a398fceb6c42, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  wheels:
+  - {fileID: 8920209716084356916}
+  - {fileID: 8823553907362463700}
+  - {fileID: 718348106756094633}
+  - {fileID: 7589370316408104641}
+  rotationSpeed: 360
 --- !u!143 &7287576227080781944
 CharacterController:
   m_ObjectHideFlags: 0
@@ -17079,7 +17098,7 @@ ParticleSystem:
     startLifetime:
       serializedVersion: 2
       minMaxState: 3
-      scalar: 1
+      scalar: 2
       minScalar: 1
       maxCurve:
         serializedVersion: 2
@@ -17132,8 +17151,8 @@ ParticleSystem:
     startSpeed:
       serializedVersion: 2
       minMaxState: 3
-      scalar: 3
-      minScalar: 3
+      scalar: 5
+      minScalar: 5
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -17628,7 +17647,7 @@ ParticleSystem:
     serializedVersion: 6
     enabled: 1
     type: 4
-    angle: 45
+    angle: 20
     length: 5
     boxThickness: {x: 0, y: 0, z: 0}
     radiusThickness: 1
@@ -22155,9 +22174,29 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5d2a1c7b1f5bf7f41b5352938e00fc69, type: 3}
+--- !u!4 &718348106756094633 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3316992658331686828, guid: 5d2a1c7b1f5bf7f41b5352938e00fc69, type: 3}
+  m_PrefabInstance: {fileID: 2877878174370573573}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &2340463945154317038 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 5d2a1c7b1f5bf7f41b5352938e00fc69, type: 3}
+  m_PrefabInstance: {fileID: 2877878174370573573}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &7589370316408104641 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5666261585234168772, guid: 5d2a1c7b1f5bf7f41b5352938e00fc69, type: 3}
+  m_PrefabInstance: {fileID: 2877878174370573573}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &8823553907362463700 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -2484921068739079471, guid: 5d2a1c7b1f5bf7f41b5352938e00fc69, type: 3}
+  m_PrefabInstance: {fileID: 2877878174370573573}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &8920209716084356916 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -2577548232221058511, guid: 5d2a1c7b1f5bf7f41b5352938e00fc69, type: 3}
   m_PrefabInstance: {fileID: 2877878174370573573}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &3655211048244779020

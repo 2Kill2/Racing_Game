@@ -414,6 +414,10 @@ public class PlayerController : MonoBehaviour
         gameWon = true;
         ad.Stop();
     }
+    public float CurrentSpeed()
+    {
+        return currentSpeed;
+    }
 
     void Pause()
     {

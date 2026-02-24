@@ -3,7 +3,11 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 3
-  tags: []
+  tags:
+  - Hazard_Rock
+  - Hazard_Cow
+  - Hazard_Barrel
+  - Hazard_Log
   layers:
   - Default
   - TransparentFX
