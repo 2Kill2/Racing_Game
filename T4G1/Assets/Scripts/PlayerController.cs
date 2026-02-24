@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using System.Collections;
 
 public class PlayerController : MonoBehaviour
 {
@@ -67,6 +68,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private AudioClip boostSound;
     [SerializeField] private AudioClip boostRefill;
     [SerializeField] private AudioClip objectBreak;
+    [SerializeField] private AudioClip cowBreak;
     [SerializeField] private AudioClip carExplode;
     private enum EngineState { Idle, Accelerating, Loop, Decelerating }
     private EngineState currentEngineState = EngineState.Idle;
@@ -81,6 +83,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private GameObject metalChip;
     [SerializeField] private GameObject rockChip;
     [SerializeField] private GameObject meatChip;
+    [SerializeField] private GameObject explodeVFX;
+    
 
     // cam
     private float horizontalAngle = 0f;
@@ -371,19 +375,44 @@ public class PlayerController : MonoBehaviour
                 HP -= 25;
                 if (HP <= 0)
                 {
-                    Pause();
                     ad.Stop();
-                    gameOverScreen.gameObject.SetActive(true);//convert to a loss function when u can bruh
+                    playParticle(explodeVFX);
+                    ad.PlayOneShot(carExplode);
+                    StartCoroutine(gameOver(0.5f));
                 }
             }
             if (other.gameObject.CompareTag("Hazard_Rock"))
             {
                 playParticle(rockChip);
+                ad.PlayOneShot(objectBreak);
             }
-            ad.PlayOneShot(objectBreak);
+            else if (other.gameObject.CompareTag("Hazard_Log"))
+            {
+                playParticle(woodChip);
+                ad.PlayOneShot(objectBreak);
+            }
+            else if (other.gameObject.CompareTag("Hazard_Cow"))
+            {
+                playParticle(meatChip);
+                ad.PlayOneShot(cowBreak);
+            }
+            else if (other.gameObject.CompareTag("Hazard_Barrel"))
+            {
+                playParticle(metalChip);
+                ad.PlayOneShot(objectBreak);
+            }
             playParticle(paintChip);
+
             other.gameObject.SetActive(false);
         }
+    }
+
+    IEnumerator gameOver(float dur)
+    {
+        yield return new WaitForSeconds(dur);
+        Pause();
+        ad.Stop();
+        gameOverScreen.gameObject.SetActive(true);
     }
 
     private void playParticle(GameObject m)
@@ -422,10 +451,5 @@ public class PlayerController : MonoBehaviour
     void Pause()
     {
         Time.timeScale = 0f;
-    }
-
-    void die()
-    {
-
     }
 }
