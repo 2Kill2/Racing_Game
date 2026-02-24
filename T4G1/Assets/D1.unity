@@ -1344,7 +1344,11 @@ GameObject:
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
   m_IsActive: 1
+=======
+  m_IsActive: 0
+>>>>>>> Stashed changes
 =======
   m_IsActive: 0
 >>>>>>> Stashed changes
@@ -6896,8 +6900,13 @@ Transform:
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
   - {fileID: 963341740}
   - {fileID: 455146693}
+=======
+  - {fileID: 455146693}
+  - {fileID: 2084821889}
+>>>>>>> Stashed changes
 =======
   - {fileID: 455146693}
   - {fileID: 2084821889}
@@ -13687,7 +13696,11 @@ GameObject:
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
   m_IsActive: 1
+=======
+  m_IsActive: 0
+>>>>>>> Stashed changes
 =======
   m_IsActive: 0
 >>>>>>> Stashed changes
@@ -24219,6 +24232,7 @@ PrefabInstance:
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     - target: {fileID: 5745417164393383803, guid: 11480e1d58686e14fac9048b221268c5, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
@@ -24231,6 +24245,8 @@ PrefabInstance:
       propertyPath: m_AnchorMin.x
       value: 0
       objectReference: {fileID: 0}
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
 =======
