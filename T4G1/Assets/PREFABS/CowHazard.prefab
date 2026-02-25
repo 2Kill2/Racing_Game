@@ -48,7 +48,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 362aee60fae06784aa9160fb08e5c5ce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  moveDistance: {x: 5, y: 0, z: 5}
+  moveDistance: {x: 1, y: 0, z: 1}
   speed: 0.5
 --- !u!33 &4370247756172365176
 MeshFilter:

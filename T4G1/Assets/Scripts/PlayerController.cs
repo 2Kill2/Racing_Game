@@ -89,7 +89,9 @@ public class PlayerController : MonoBehaviour
     // cam
     private float horizontalAngle = 0f;
     private float verticalAngle = 20f;
+    private bool cam = false;
 
+    private bool gameLosted = false;
     private bool gameWon = false;
 
     //timer
@@ -125,6 +127,12 @@ public class PlayerController : MonoBehaviour
 
     void LateUpdate()
     {
+        if (!cam)
+        {
+            horizontalAngle = transform.eulerAngles.y;
+            verticalAngle = 20f;
+            cam = true;
+        }
         moveCamera();
         camFOV();
     }
@@ -411,6 +419,7 @@ public class PlayerController : MonoBehaviour
     {
         yield return new WaitForSeconds(dur);
         Pause();
+        gameLosted = true;
         ad.Stop();
         gameOverScreen.gameObject.SetActive(true);
     }
